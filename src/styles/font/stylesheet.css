@@ -1,0 +1,63 @@
+@font-face {
+    font-family: 'Rebrand Txt';
+    src: url('RebrandTxt-ExLight.woff2') format('woff2'),
+        url('RebrandTxt-ExLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rebrand Txt';
+    src: url('RebrandTxt-Light.woff2') format('woff2'),
+        url('RebrandTxt-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rebrand Txt';
+    src: url('RebrandTxt-Regular.woff2') format('woff2'),
+        url('RebrandTxt-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rebrand Txt';
+    src: url('RebrandTxt-Medium.woff2') format('woff2'),
+        url('RebrandTxt-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rebrand Txt';
+    src: url('RebrandTxt-SemiBold.woff2') format('woff2'),
+        url('RebrandTxt-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rebrand Txt';
+    src: url('RebrandTxt-Bold.woff2') format('woff2'),
+        url('RebrandTxt-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Rebrand Txt';
+    src: url('RebrandTxt-Black.woff2') format('woff2'),
+        url('RebrandTxt-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}

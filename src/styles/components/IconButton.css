@@ -1,0 +1,59 @@
+.icon-button {
+  @apply m-2 flex justify-center items-center rounded-full font-semibold border border-transparent
+}
+
+.icon-button-default {
+  @apply bg-inherit transition ease-in-out hover:bg-black hover:bg-opacity-20
+}
+
+.icon-button-lipa {
+  @apply bg-lipa text-lipa border-lipa transition ease-in-out hover:bg-tamagotchi hover:text-tamagotchi hover:border-tamagotchi
+}
+
+.icon-button-tamagotchi {
+  @apply bg-tamagotchi text-tamagotchi border-tamagotchi transition ease-in-out hover:bg-lipa hover:text-lipa hover:border-lipa
+}
+
+.icon-button-info {
+  @apply bg-info text-info border-info transition ease-in-out hover:bg-blue-700
+}
+
+.icon-button-error {
+  @apply bg-error text-error border-error transition ease-in-out hover:bg-red-700
+}
+
+.icon-button-success {
+  @apply bg-success text-success border-success transition ease-in-out hover:bg-emerald-600
+}
+
+.icon-button-warning {
+  @apply bg-warning text-warning border-warning transition ease-in-out hover:bg-emerald-600
+}
+
+.icon-button-filled {
+  @apply bg-opacity-100 text-white
+}
+
+.icon-button-outlined {
+  @apply bg-opacity-0 border-opacity-100 hover:bg-opacity-20
+}
+
+.icon-button-transparent {
+  @apply bg-transparent border-transparent hover:bg-opacity-10
+}
+
+.icon-button-sm {
+  @apply w-6 h-6 text-sm
+}
+
+.icon-button-md {
+  @apply w-8 h-8 text-base
+}
+
+.icon-button-lg {
+  @apply w-12 h-12 text-lg
+}
+
+.icon-button-transition {
+  @apply tracking-wide transition ease-in-out hover:border-black
+}

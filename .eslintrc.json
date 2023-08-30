@@ -1,3 +1,70 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:tailwindcss/recommended",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "tailwindcss",
+    "simple-import-sort"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.{ts,tsx}"
+      ]
+    }
+  ],
+  "ignorePatterns": [
+    "public/*",
+    "*.js"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      },
+      {
+        "usePrettierrc": true
+      }
+    ],
+    "arrow-body-style": "off",
+    "prefer-arrow-callback": "off",
+    "no-console": "error",
+    "no-debugger": "error",
+    "no-unused-expressions": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          [
+            "^react$",
+            "^next"
+          ],
+          [
+            "^[a-zA-Z0-9]",
+            "^@[a-zA-Z0-9]"
+          ],
+          [
+            "^@/services",
+            "^@/hooks",
+            "^@/common",
+            "^@/utils"
+          ],
+          [
+            "^@/styles",
+            "^@/components/ui/atoms",
+            "^@/components/ui/molecules",
+            "^@/components/ui/organisms",
+            "^@/components/templates",
+            "^@/pages"
+          ]
+        ]
+      }
+    ]
+  }
 }

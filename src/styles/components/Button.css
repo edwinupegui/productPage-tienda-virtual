@@ -1,0 +1,127 @@
+.button {
+  @apply my-1 min-w-max rounded-full font-bold border border-transparent flex justify-center items-center no-underline hover:no-underline transition ease-in-out
+}
+
+.button-filled {
+  @apply text-white
+}
+
+.button-filled-default {
+  @apply bg-gray-100 text-black hover:bg-black hover:text-white
+}
+
+.button-filled-lipa {
+  @apply bg-fuchsia-500 hover:bg-indigo-600
+}
+
+.button-filled-tamagotchi {
+  @apply bg-indigo-600 hover:bg-fuchsia-500
+}
+
+.button-filled-success {
+  @apply bg-success hover:bg-emerald-700
+}
+
+.button-filled-info {
+  @apply bg-info hover:bg-blue-700
+}
+
+.button-filled-warning {
+  @apply bg-warning hover:bg-orange-700
+}
+
+.button-filled-error {
+  @apply bg-error hover:bg-red-700
+}
+
+.button-filled-dark {
+  @apply bg-black hover:bg-white hover:border-black hover:text-black
+}
+
+.button-outlined {
+  @apply bg-opacity-10 hover:bg-opacity-10 !important
+}
+
+.button-outlined-default {
+  @apply bg-white border-gray-300 text-black hover:border-black hover:text-black
+}
+
+.button-outlined-lipa {
+  @apply border-lipa text-lipa hover:border-tamagotchi hover:text-tamagotchi
+}
+
+.button-outlined-tamagotchi {
+  @apply border-tamagotchi text-tamagotchi hover:border-lipa hover:text-lipa
+}
+
+.button-outlined-success {
+  @apply bg-success border-success text-success hover:bg-emerald-700 hover:border-emerald-700 hover:text-emerald-700
+}
+
+.button-outlined-info {
+  @apply bg-info border-info text-info hover:bg-blue-700 hover:border-blue-700 hover:text-blue-700
+}
+
+.button-outlined-warning {
+  @apply bg-warning border-warning text-warning hover:bg-orange-700 hover:border-orange-700 hover:text-orange-700
+}
+
+.button-outlined-error {
+  @apply bg-error border-error text-error hover:bg-red-700 hover:border-red-700 hover:text-red-700
+}
+
+.button-text {
+  @apply px-0 !important
+}
+
+.button-text-default {
+  @apply text-black hover:text-lipa
+}
+
+.button-text-lipa {
+  @apply text-lipa hover:text-tamagotchi
+}
+
+.button-text-tamagotchi {
+  @apply text-tamagotchi hover:text-lipa
+}
+
+.button-text-success {
+  @apply text-success hover:text-emerald-700
+}
+
+.button-text-info {
+  @apply text-info hover:text-blue-700
+}
+
+.button-text-warning {
+  @apply text-warning hover:text-orange-700
+}
+
+.button-text-error {
+  @apply text-error hover:text-red-700
+}
+
+.button-sm {
+  @apply px-4 py-1 my-0.5 text-sm font-semibold
+}
+
+.button-md {
+  @apply px-6 py-2 text-base
+}
+
+.button-lg {
+  @apply px-8 py-2.5 text-lg
+}
+
+.button-xl {
+  @apply px-10 py-3 text-lg
+}
+
+.button-animation-left {
+  @apply transition ease-in hover:-translate-x-2
+}
+
+.button-animation-right {
+  @apply transition ease-in hover:translate-x-2
+}

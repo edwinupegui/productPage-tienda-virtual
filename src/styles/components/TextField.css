@@ -1,0 +1,15 @@
+.input {
+  @apply w-full block py-3 px-4 rounded-lg transition ease-in-out !border-2 !border-gray-200 !border-solid bg-white hover:ring-1 hover:ring-tamagotchi hover:!border-tamagotchi focus:ring-2 active:ring-2 focus:ring-tamagotchi active:ring-tamagotchi focus:outline-none
+}
+
+.input-success {
+  @apply !border-success bg-emerald-50 hover:!border-success hover:ring-success focus:ring-success
+}
+
+.input-error {
+  @apply !border-error text-error bg-red-50 hover:!border-error hover:ring-error focus:ring-error
+}
+
+.input-disabled {
+  @apply bg-slate-100
+}

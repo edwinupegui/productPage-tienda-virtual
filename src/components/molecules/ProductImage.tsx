@@ -1,0 +1,105 @@
+import { useState } from "react";
+import clsx from "clsx";
+import { Swiper as SwiperClass } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import Image from "next/image";
+
+interface IProductImage {
+  images: any[];
+  productName: string;
+}
+
+const ProductImage = ({ images = [], productName }: IProductImage) => {
+  const [imageSelected, setImageSelected] = useState<number>(0);
+  const [swiper, setSwiper] = useState<SwiperClass>();
+
+  const handleImage = (key: number) => {
+    if (swiper) {
+      swiper.slideTo(key);
+      setImageSelected(key);
+    }
+  };
+
+  return (
+    <div className="my-2 flex flex-col md:my-0 md:flex-row">
+      <div className="relative my-2 aspect-square w-full overflow-hidden bg-white md:my-0 md:mx-4">
+        <div className="absolute inset-0 h-auto w-full">
+          <Swiper
+            slidesPerView={1}
+            onSwiper={setSwiper}
+            centeredSlides={true}
+            initialSlide={0}
+          >
+            {images.length > 0 ? (
+              images?.map(({ src }, key) => (
+                <SwiperSlide key={key}>
+                  <div className="pointer-events-none flex aspect-square flex-col items-center justify-center object-scale-down transition duration-300 ease-in-out sm:pointer-events-auto md:hover:scale-150">
+                    <Image
+                      width={500}
+                      height={500}
+                      className="h-[60%] w-[90%] object-scale-down"
+                      src={src}
+                      alt={productName}
+                    />
+                  </div>
+                </SwiperSlide>
+              ))
+            ) : (
+              <SwiperSlide>
+                <div className="flex aspect-square flex-col items-center justify-center bg-gray-200 object-scale-down text-center">
+                  <span className="text-4xl font-bold text-gray-400">
+                    Producto sin imágenes
+                  </span>
+                </div>
+              </SwiperSlide>
+            )}
+          </Swiper>
+        </div>
+        <div className="absolute bottom-2 z-10 w-full space-x-2 p-1 md:mx-4">
+          <Swiper
+            effect="fade"
+            spaceBetween={4}
+            breakpoints={{
+              375: {
+                slidesPerView: 8,
+              },
+              768: {
+                slidesPerView: 8,
+              },
+              1024: {
+                slidesPerView: 12,
+              },
+            }}
+          >
+            {images?.map(({ src }, key) => (
+              <SwiperSlide key={key}>
+                <span
+                  className="cursor-pointer"
+                  onMouseEnter={() => handleImage(key)}
+                  onClick={() => handleImage(key)}
+                >
+                  <div
+                    className={clsx(
+                      "block h-10 w-10 rounded-lg border bg-white shadow transition ease-in-out hover:border-tamagotchi md:h-12 md:w-12 border-[#E2E2E2]",
+                      imageSelected === key && "border-tamagotchi"
+                    )}
+                  >
+                    <Image
+                      width={500}
+                      height={500}
+                      className="aspect-square rounded-lg"
+                      src={src}
+                      alt={`${productName} (${key + 1})`}
+                    />
+                  </div>
+                </span>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductImage;

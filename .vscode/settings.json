@@ -1,0 +1,8 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll": true
+  },
+  "editor.suggest.insertMode": "replace",
+  "[css]": {"editor.defaultFormatter": "bradlc.vscode-tailwindcss"}
+}

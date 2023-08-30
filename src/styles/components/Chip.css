@@ -1,0 +1,39 @@
+.chip {
+  @apply px-2 text-sm rounded-full border
+}
+
+.chip-lipa {
+  @apply bg-lipa text-lipa border-lipa
+}
+
+.chip-tamagotchi {
+  @apply bg-tamagotchi text-tamagotchi border-tamagotchi
+}
+
+.chip-error {
+  @apply bg-error text-error border-error
+}
+
+.chip-info {
+  @apply bg-info text-info border-info
+}
+
+.chip-success {
+  @apply bg-success text-success border-success
+}
+
+.chip-warning {
+  @apply bg-warning text-warning border-warning
+}
+
+.chip-filled {
+  @apply text-white
+}
+
+.chip-outlined {
+  @apply bg-transparent
+}
+
+.chip-dark {
+  @apply bg-black
+}
