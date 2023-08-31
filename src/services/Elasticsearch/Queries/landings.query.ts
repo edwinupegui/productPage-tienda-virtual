@@ -1,6 +1,6 @@
-import { Results } from '@components/organisms/Results';
 
-export const landingsQuery = (landingId: number): Results => ({
+
+export const landingsQuery = (landingId: number): any => ({
   must: [
     {
       term: {
@@ -10,7 +10,7 @@ export const landingsQuery = (landingId: number): Results => ({
   ],
 });
 
-export const especificIdsQuery = (productsIds: number[]): Results => ({
+export const especificIdsQuery = (productsIds: number[]): any => ({
   must: [
     {
       ids: {

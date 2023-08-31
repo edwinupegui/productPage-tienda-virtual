@@ -1,7 +1,4 @@
-import {
-  QueryDslQueryContainer,
-  SortCombinations,
-} from '@elastic/elasticsearch/api/types';
+
 
 export type Indices =
   | 'categories'
@@ -44,7 +41,7 @@ export interface Aggregation {
 export interface BaseQueryArgs {
   from: number;
   size: number;
-  sort: SortCombinations[];
-  must: QueryDslQueryContainer[];
-  should: QueryDslQueryContainer[];
+  sort: any[];
+  must: any[];
+  should: any[];
 }

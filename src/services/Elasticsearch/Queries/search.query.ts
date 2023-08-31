@@ -1,6 +1,6 @@
-import { Results } from '@components/organisms/Results';
 
-export const PrincipalSearchQuery = (query: string): Results => ({
+
+export const PrincipalSearchQuery = (query: string): any => ({
   must: [
     {
       multi_match: {

@@ -1,20 +1,13 @@
-import {
-  ADULTS_CATEGORIES_LIST,
-  FILTERS,
-} from '@constants/elasticsearch.constants';
-import { SearchRequest } from '@elastic/elasticsearch/api/types';
-
-import { BaseQueryArgs } from '@appTypes/Elasticsearch';
 
 export const BaseQueryResults = (
-  { from, size, sort, must, should = [] }: BaseQueryArgs,
+  { from, size, sort, must, should = [] }: any,
   restrictions: boolean
-): SearchRequest => ({
+): any => ({
   body: {
     from,
     size,
     sort,
-    aggs: FILTERS,
+    aggs: {},
     query: {
       function_score: {
         functions: [
@@ -77,7 +70,7 @@ export const BaseQueryResults = (
             must_not: [
               {
                 terms: {
-                  'categories.id': restrictions ? ADULTS_CATEGORIES_LIST : [],
+                  'categories.id': [],
                 },
               },
               {
@@ -247,14 +240,14 @@ export const BaseQueryResults = (
 });
 
 export const BaseQuerySearchResults = (
-  { from, size, sort, must, should = [] }: BaseQueryArgs,
+  { from, size, sort, must, should = [] }: any,
   restrictions: boolean
-): SearchRequest => ({
+): any => ({
   body: {
     from,
     size,
     sort,
-    aggs: FILTERS,
+    aggs: {},
     query: {
       function_score: {
         functions: [
@@ -301,7 +294,7 @@ export const BaseQuerySearchResults = (
             must_not: [
               {
                 terms: {
-                  'categories.id': restrictions ? ADULTS_CATEGORIES_LIST : [],
+                  'categories.id': [],
                 },
               },
               {

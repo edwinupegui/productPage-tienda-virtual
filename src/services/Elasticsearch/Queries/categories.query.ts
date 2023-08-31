@@ -1,6 +1,5 @@
-import { Results } from '@components/organisms/Results';
 
-export const CategoriesQuery = (category: string): Results => ({
+export const CategoriesQuery = (category: string): any => ({
   must: [
     {
       match: {

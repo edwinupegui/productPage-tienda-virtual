@@ -1,6 +1,6 @@
-import { Results } from '@components/organisms/Results';
 
-export const StoresQuery = (storeId: number): Results => ({
+
+export const StoresQuery = (storeId: number): any => ({
   must: [
     {
       term: {

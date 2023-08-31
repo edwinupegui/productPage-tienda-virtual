@@ -1,9 +1,9 @@
-import { Results } from '@components/organisms/Results';
+
 
 export const multiCategoriesQuery = (
   categorys: string[] = [],
   stores: string[] = []
-): Results => ({
+): any => ({
   must: [
     {
       bool: {

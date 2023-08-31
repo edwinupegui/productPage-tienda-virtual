@@ -1,9 +1,9 @@
-import { QueryDslQueryContainer } from '@elastic/elasticsearch/api/types';
+
 
 export const TermFilterQuery = (
   term: string,
   keyword: string
-): QueryDslQueryContainer => ({
+): any => ({
   bool: {
     minimum_should_match: 1,
     should: [
@@ -19,7 +19,7 @@ export const TermFilterQuery = (
 export const RangeFilterQuery = (
   term: string,
   range: { from: number; to: number }
-): QueryDslQueryContainer => ({
+): any => ({
   bool: {
     minimum_should_match: 1,
     should: {
