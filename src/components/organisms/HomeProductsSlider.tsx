@@ -63,7 +63,7 @@ export default function HomeProductsSlider({
           }}
         /> */}
       </div>
-      <div className="pt-4 md:hidden">
+      <div className="pt-4 px-10 md:hidden">
         <a className="flex items-center justify-between font-extrabold">
           Ver Más
           <FontAwesomeIcon icon={faArrowRight} />

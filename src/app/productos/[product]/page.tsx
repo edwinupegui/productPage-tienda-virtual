@@ -18,6 +18,7 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import useSideCart from "@/hooks/useSideCart.hook";
 import { ElasticLogIndex } from "@/types/Elasticsearch/Index/checkoutlog.types";
 import HomeProductsSlider from "@/components/organisms/HomeProductsSlider";
+import clsx from "clsx";
 const Product = () => {
   const { open, addNew } = useSideCart();
   const pathname = usePathname();
@@ -123,15 +124,15 @@ const Product = () => {
   }
 
   return (
-    <main >
-      <header className="bg-info w-full h-[90px] flex justify-between py-2 px-10 items-center fixed z-10 top-0">
+    <main>
+      <header className="bg-info w-full h-[90px] flex  justify-between py-2 px-10 items-center fixed z-[20] top-0">
         <div className="flex gap-4 items-center">
           <div>
             <Image
               width={100}
               height={100}
               src={product.sellerInfo.imageUrl}
-              className="rounded-full h-14 w-14"
+              className="rounded-full h-10 w-10 md:h-14 md:w-14"
               alt={product.sellerInfo.name}
             />
           </div>
@@ -144,23 +145,36 @@ const Product = () => {
             </p>
           </div>
         </div>
-        <div className="flex gap-10 ">
-          <div className="border-r border-white pr-10">
-            <p className="text-white text-base">¿Tienes dudas? Escríbenos</p>
-            <div className="text-white text-xl font-bold flex gap-2 items-center">
-              <FontAwesomeIcon icon={faWhatsapp} size="1x" />
-              <p>300 123 4567</p>
+        <div className="hidden md:block">
+          <div className="flex gap-10 items-center">
+            <div className={clsx("border-r border-white pr-10")}>
+              <p className="text-white text-base">¿Tienes dudas? Escríbenos</p>
+              <div className="text-white text-xl font-bold flex gap-2 items-center">
+                <FontAwesomeIcon icon={faWhatsapp} size="1x" />
+                <p>300 123 4567</p>
+              </div>
+            </div>
+            <div
+              onClick={() => {
+                addNew();
+                open();
+              }}
+              className="bg-white text-info transition-all md:w-32 md:h-10 rounded-full flex justify-center items-center gap-2 cursor-pointer hover:bg-tamagotchi hover:text-white"
+            >
+              <FontAwesomeIcon icon={faCartShopping} size="1x" />
+              <p className="font-semibold">Carrito</p>
             </div>
           </div>
+        </div>
+        <div className="md:hidden block">
           <div
             onClick={() => {
               addNew();
               open();
             }}
-            className="bg-white text-info transition-all w-32 h-10 rounded-full flex justify-center items-center gap-2 cursor-pointer hover:bg-tamagotchi hover:text-white"
+            className="bg-white text-info transition-all w-12 h-12 rounded-full flex justify-center items-center gap-2 cursor-pointer hover:bg-tamagotchi hover:text-white"
           >
-            <FontAwesomeIcon icon={faCartShopping} size="1x" />
-            <p className="font-semibold">Carrito</p>
+            <FontAwesomeIcon icon={faCartShopping} size="xl" />
           </div>
         </div>
       </header>
