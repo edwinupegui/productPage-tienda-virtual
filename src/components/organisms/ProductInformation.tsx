@@ -4,13 +4,16 @@ import Chip from "../atoms/Chip";
 import { NumericFormat } from "react-number-format";
 import { Source } from "@/types/Elasticsearch/Index/products.type";
 import { useState } from "react";
+import useSideCart from "@/hooks/useSideCart.hook";
+import { useProductElasticContext } from "@/contexts/productElasticContext";
 
 const ProductInformation = (product: Source) => {
+  const { open, addNew } = useSideCart();
   const [disableButtons, setDisableButtons] = useState(false);
-
   const stock = product.stock;
   const available = product.stock ? Boolean(+product.stock > 0) : false;
-
+  const { setQuantity } = useProductElasticContext();
+  
   return (
     <div className="h-full space-y-4 rounded border-l p-4 flex flex-col gap-4">
       <div className="">
@@ -36,9 +39,20 @@ const ProductInformation = (product: Source) => {
       <div className="">
         {typeof stock !== "undefined" && (
           <div className="space-y-2">
-            <Chip color={available ? "success" : "dark"}>
-              {available ? "Stock disponible" : "No disponible"}
+            <Chip color={available ? "success" : "error"}>
+              {available ? "Stock disponible" : "Stock No Disponible"}
             </Chip>
+            {!available && (
+              <div className="border rounded-md ">
+                <p>
+                  ¿Deseas que te notifiquemos cuando este producto tenga stock
+                  disponible?
+                </p>
+                <Button color="info" size="md">
+                  Si, avisame
+                </Button>
+              </div>
+            )}
             {available && +stock === 1 && (
               <span className="ml-2 font-bold">¡Último disponible!</span>
             )}
@@ -47,7 +61,8 @@ const ProductInformation = (product: Source) => {
                 <QuantityInput
                   max={+product.stock}
                   labelQuantity={true}
-                  onChange={async () => {
+                  onChange={async (quantity: number) => {
+                    setQuantity(quantity);
                     return true;
                   }}
                 />
@@ -62,6 +77,10 @@ const ProductInformation = (product: Source) => {
           size="lg"
           disabled={!available || disableButtons}
           fullwidth
+          onClick={() => {
+            addNew();
+            open();
+          }}
         >
           Añadir al carrito
         </Button>
@@ -71,7 +90,10 @@ const ProductInformation = (product: Source) => {
           variant="outlined"
           disabled={!available || disableButtons}
           fullwidth
-          onClick={() => setDisableButtons(true)}
+          onClick={() => {
+            addNew();
+            open();
+          }}
         >
           Comprar ahora
         </Button>

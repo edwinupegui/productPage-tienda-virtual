@@ -33,11 +33,11 @@ const ProductImage = ({ images = [], productName }: IProductImage) => {
             {images.length > 0 ? (
               images?.map(({ src }, key) => (
                 <SwiperSlide key={key}>
-                  <div className="pointer-events-none flex aspect-square flex-col items-center justify-center object-scale-down transition duration-300 ease-in-out sm:pointer-events-auto md:hover:scale-150">
+                  <div className="pointer-events-none flex aspect-square flex-col items-center justify-center object-scale-down transition duration-300 ease-in-out sm:pointer-events-auto cursor-zoom-in md:hover:scale-150">
                     <Image
                       width={500}
                       height={500}
-                      className="h-[60%] w-[90%] object-scale-down"
+                      className="h-[50%] w-[80%] object-scale-down"
                       src={src}
                       alt={productName}
                     />

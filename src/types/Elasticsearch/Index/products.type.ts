@@ -108,6 +108,7 @@ export interface Source {
   priceFilter: number;
   regularPrice: string;
   slug: string;
+  slugBase: string
   status: string;
   totalSales: number;
   stock: number;
@@ -196,6 +197,7 @@ export interface SellerInfo {
   slug: string;
   city: string;
   imageUrl: string;
+  rate: number
 }
 
 export interface Total {

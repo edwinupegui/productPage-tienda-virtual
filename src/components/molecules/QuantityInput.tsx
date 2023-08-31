@@ -92,8 +92,7 @@ const QuantityInput = ({
           <div className="flex items-center justify-between">
             <IconButton
               icon={faCircleMinus}
-              size={dense ? '1x' : 'lg'}
-              fullwidth
+              size={dense ? '2x' : 'lg'}
               onClick={subtractQuantity}
               disabled={quantity <= 1 ? true : disabled || activeQuantity}
             />
@@ -128,8 +127,7 @@ const QuantityInput = ({
             )}
             <IconButton
               icon={faCirclePlus}
-              size={dense ? '1x' : 'lg'}
-              fullwidth
+              size={dense ? '2x' : 'lg'}
               onClick={addQuantity}
               disabled={disabled || activeQuantity}
             />

@@ -1,0 +1,51 @@
+.badge {
+  @apply text-white absolute -top-1.5 -right-1 text-sm px-2 rounded-full cursor-default
+}
+
+.badge-dot {
+  @apply absolute top-2 right-2 h-2 w-2 rounded-full cursor-default
+}
+
+.badge-dot-sm {
+  @apply top-2 right-2 h-2 w-2
+}
+
+.badge-dot-md {
+  @apply top-1 right-1 h-4 w-4
+}
+
+.badge-dot-lg {
+  @apply top-0 right-0 h-6 w-6
+}
+
+.badge-default {
+  @apply bg-white bg-opacity-20
+}
+
+.badge-lipa {
+  @apply bg-lipa
+}
+
+.badge-tamagotchi {
+  @apply bg-tamagotchi
+}
+
+.badge-info {
+  @apply bg-blue-500
+}
+
+.badge-error {
+  @apply bg-red-500
+}
+
+.badge-success {
+  @apply bg-emerald-500
+}
+
+.badge-success {
+  @apply bg-emerald-500
+}
+
+.badge-transparent {
+  @apply bg-transparent
+}

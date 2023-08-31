@@ -51,7 +51,7 @@
 }
 
 .button-outlined-tamagotchi {
-  @apply border-tamagotchi text-tamagotchi hover:border-lipa hover:text-lipa
+  @apply border-info text-info hover:border-tamagotchi hover:text-tamagotchi
 }
 
 .button-outlined-success {

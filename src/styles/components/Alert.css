@@ -1,0 +1,43 @@
+.alert {
+  @apply mt-2 px-4 py-2 rounded-lg border border-transparent flex items-center
+}
+
+.alert-default {
+  @apply border-gray-400 bg-transparent
+}
+
+.alert-lipa {
+  @apply border-lipa bg-lipa text-lipa
+}
+
+.alert-tamagotchi {
+  @apply border-tamagotchi bg-tamagotchi text-tamagotchi
+}
+
+.alert-info {
+  @apply border-info bg-info text-info
+}
+
+.alert-success {
+  @apply border-success bg-success text-success
+}
+
+.alert-error {
+  @apply border-error bg-error text-error
+}
+
+.alert-dark {
+  @apply border-black bg-black text-black
+}
+
+.alert-outlined {
+  @apply bg-opacity-10
+}
+
+.alert-filled {
+  @apply bg-opacity-100 text-white
+}
+
+.alert-text {
+  @apply bg-opacity-0 border-none
+}
