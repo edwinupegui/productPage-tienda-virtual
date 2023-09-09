@@ -8,7 +8,7 @@ interface EmptyCart {
 }
 
 const EmptyCart = ({ onClick }: EmptyCart) => (
-  <div className="flex flex-col items-center justify-center space-y-4 text-center text-disabled">
+  <div className="flex flex-col items-center justify-center space-y-4 text-center text-disabled pt-10">
     <FontAwesomeIcon icon={faCartCircleExclamation} size="10x" />
     <h4>
       <b>Tu carrito está vacío.</b>

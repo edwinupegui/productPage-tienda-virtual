@@ -1,78 +1,39 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
 import ProductImage from "@/components/molecules/ProductImage";
 import ElasticsearchClient from "@/services/Elasticsearch/Client";
-import { ProductBySlug } from "@/types/Elasticsearch/Index/products.type";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import ProductInformation from "@/components/organisms/ProductInformation";
-import { useProductElasticContext } from "@/contexts/productElasticContext";
 import useSWR from "swr";
-import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/pro-regular-svg-icons";
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import useSideCart from "@/hooks/useSideCart.hook";
-import { ElasticLogIndex } from "@/types/Elasticsearch/Index/checkoutlog.types";
-import HomeProductsSlider from "@/components/organisms/HomeProductsSlider";
-import clsx from "clsx";
-const Product = () => {
-  const { open, addNew } = useSideCart();
-  const pathname = usePathname();
-  const { product, setProduct } = useProductElasticContext();
-  const [productStore, setProductStore] = useState<any[]>();
+import { ProductBySlug } from "@/types/Elasticsearch/Index/products.type";
 
-  const getProduct = async () => {
-    const { hits } = await ElasticsearchClient.searchTemplate<ProductBySlug>(
-      "products",
-      {
+const Product = () => {
+  const pathname = usePathname();
+
+  const { data: product, isLoading } = useSWR<ProductBySlug>(
+    {
+      index: "products",
+      request: {
         body: {
           id: "productBySlug",
           params: {
             keyword: pathname.split("/")[2] || "",
           },
         },
-      }
-    );
-    if (!hits || hits.hits.length === 0) {
-      return {
-        notFound: true,
-      };
+      },
+    },
+    ElasticsearchClient.searchTemplate,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
     }
-    getProductStore(hits.hits[0]?._source.sellerInfo.name);
-    setProduct(hits.hits[0]?._source);
-  };
+  );
 
-  const getProductStore = async (store: string) => {
-    const { hits } = await ElasticsearchClient.search<ElasticLogIndex>(
-      "products",
-      {
-        body: {
-          query: {
-            terms: {
-              "store.keyword": [store],
-            },
-          },
-          from: 0,
-          size: 10,
-        },
-      }
-    );
-    let arrayStore = [];
-    for (let index = 0; index < 10; index++) {
-      arrayStore.push(hits.hits[0]);
-    }
-    setProductStore(arrayStore);
-  };
-
-  useEffect(() => {
-    getProduct();
-  }, [pathname]);
-
-  if (!product) {
+  if (isLoading) {
     return (
       <main>
         <div className="space-y-4 py-2">
@@ -124,79 +85,23 @@ const Product = () => {
   }
 
   return (
-    <main>
-      <header className="bg-info w-full h-[90px] flex  justify-between py-2 px-10 items-center fixed z-[20] top-0">
-        <div className="flex gap-4 items-center">
-          <div>
-            <Image
-              width={100}
-              height={100}
-              src={product.sellerInfo.imageUrl}
-              className="rounded-full h-10 w-10 md:h-14 md:w-14"
-              alt={product.sellerInfo.name}
+    <main className="grid card shadow-card grid-cols-1 lg:grid-cols-5 mx-auto">
+      {product && (
+        <>
+          <section className="lg:col-span-3">
+            <ProductImage
+              images={product.hits.hits[0]._source.images}
+              productName={product.hits.hits[0]._source.name}
             />
-          </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-lg font-bold text-white">
-              {product.sellerInfo.name}
-            </p>
-            <p className="text-base font-medium text-white">
-              {product.sellerInfo.city}
-            </p>
-          </div>
-        </div>
-        <div className="hidden md:block">
-          <div className="flex gap-10 items-center">
-            <div className={clsx("border-r border-white pr-10")}>
-              <p className="text-white text-base">¿Tienes dudas? Escríbenos</p>
-              <div className="text-white text-xl font-bold flex gap-2 items-center">
-                <FontAwesomeIcon icon={faWhatsapp} size="1x" />
-                <p>300 123 4567</p>
-              </div>
-            </div>
-            <div
-              onClick={() => {
-                addNew();
-                open();
-              }}
-              className="bg-white text-info transition-all md:w-32 md:h-10 rounded-full flex justify-center items-center gap-2 cursor-pointer hover:bg-tamagotchi hover:text-white"
-            >
-              <FontAwesomeIcon icon={faCartShopping} size="1x" />
-              <p className="font-semibold">Carrito</p>
-            </div>
-          </div>
-        </div>
-        <div className="md:hidden block">
-          <div
-            onClick={() => {
-              addNew();
-              open();
-            }}
-            className="bg-white text-info transition-all w-12 h-12 rounded-full flex justify-center items-center gap-2 cursor-pointer hover:bg-tamagotchi hover:text-white"
-          >
-            <FontAwesomeIcon icon={faCartShopping} size="xl" />
-          </div>
-        </div>
-      </header>
-      <div className="md:px-[350px]">
-        <section className="grid card shadow-card grid-cols-1 md:grid-cols-5 mx-auto md:container mt-[110px]">
-          <section className="md:col-span-3">
-            <ProductImage images={product.images} productName={product.name} />
           </section>
-          <section className="md:col-span-2">
+          <section className="lg:col-span-2">
             <div className="h-2/3">
-              <ProductInformation {...product} />
+              <ProductInformation {...product.hits.hits[0]._source} />
             </div>
             <div></div>
           </section>
-        </section>
-        <section className="mx-auto md:container my-[30px]">
-          <HomeProductsSlider
-            products={productStore}
-            title="Más productos para ti"
-          />
-        </section>
-      </div>
+        </>
+      )}
     </main>
   );
 };

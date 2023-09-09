@@ -5,15 +5,21 @@ import { NumericFormat } from "react-number-format";
 import { Source } from "@/types/Elasticsearch/Index/products.type";
 import { useState } from "react";
 import useSideCart from "@/hooks/useSideCart.hook";
-import { useProductElasticContext } from "@/contexts/productElasticContext";
+import useCart from "@/hooks/useCart.hook";
+import { ICartResponse } from "@/types/Cart/CartResponse";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import router from "next/router";
 
 const ProductInformation = (product: Source) => {
   const { open, addNew } = useSideCart();
+  const { updateCart } = useCart();
+  const [cartErrors, setCartErrors] = useState<any>();
+  const [quantity, setQuantity] = useState<number>(1);
   const [disableButtons, setDisableButtons] = useState(false);
   const stock = product.stock;
   const available = product.stock ? Boolean(+product.stock > 0) : false;
-  const { setQuantity } = useProductElasticContext();
-  
+
   return (
     <div className="h-full space-y-4 rounded border-l p-4 flex flex-col gap-4">
       <div className="">
@@ -77,9 +83,27 @@ const ProductInformation = (product: Source) => {
           size="lg"
           disabled={!available || disableButtons}
           fullwidth
-          onClick={() => {
-            addNew();
-            open();
+          onClick={async () => {
+            setDisableButtons(true);
+            updateCart({
+              product: {
+                productId: product.id,
+                quantity:
+                  product.type === "service" || product.type === "virtual"
+                    ? 1
+                    : quantity,
+              },
+            })
+              .then(() => {
+                addNew();
+                open();
+              })
+              .catch((error: AxiosError<ICartResponse>) => {
+                setCartErrors(error.response?.data.errors);
+              })
+              .finally(() => {
+                setDisableButtons(false);
+              });
           }}
         >
           Añadir al carrito
@@ -90,9 +114,31 @@ const ProductInformation = (product: Source) => {
           variant="outlined"
           disabled={!available || disableButtons}
           fullwidth
-          onClick={() => {
-            addNew();
-            open();
+          onClick={async () => {
+            setDisableButtons(true);
+            updateCart({
+              product: {
+                productId: product.id,
+                quantity:
+                  product.type === "service" || product.type === "virtual"
+                    ? 1
+                    : quantity,
+              },
+            })
+              .then(() => {
+                if (available) {
+                  toast.success(
+                    "¡Tu producto se agregó al carrito! Redireccionando al checkout...",
+                    {
+                      position: "top-center",
+                    }
+                  );
+                  // router.push('/checkout');
+                }
+              })
+              .catch((error: AxiosError<ICartResponse>) => {
+                setCartErrors(error.response?.data.errors);
+              });
           }}
         >
           Comprar ahora

@@ -1,29 +1,8 @@
 
 
 export type Indices =
-  | 'categories'
-  | 'categoriesfilters'
   | 'products'
-  | 'productsstore'
-  | 'serviceluegopago'
-  | 'productBySlug';
 
-export type Templates =
-  | 'products_bar'
-  | 'services_bar'
-  | 'stores_bar'
-  | 'store_by_id'
-  | 'bestSeller'
-  | 'bestSellerElectronic'
-  | 'bestSellePersonalCare'
-  | 'product_list_onsale_home'
-  | 'categories_home'
-  | 'categories_list'
-  | 'stores_list'
-  | 'digitalCodes'
-  | 'virtualVideo'
-  | 'virtualAudio'
-  | 'softwareLicenses';
 
 export type AggregationsFlters =
   | 'brand'

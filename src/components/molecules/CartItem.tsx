@@ -1,16 +1,19 @@
-import { AxiosError } from "axios";
+import useCart from "@/hooks/useCart.hook";
+import { Product } from "@/types/Cart/CartResponse";
 import clsx from "clsx";
 import { NumericFormat } from "react-number-format";
+import { toast } from "react-toastify";
 import Badge from "../atoms/Badge";
+import Chip from "../atoms/Chip";
 import Button from "../atoms/Button";
 import QuantityInput from "./QuantityInput";
-import { useProductElasticContext } from "@/contexts/productElasticContext";
-import Image from "next/image";
+import { useEffect } from "react";
+
 interface CartItem {
   id: string;
-  product: any;
+  product: Product;
   variant?: "cart" | "saved" | "checkout" | "side";
-  onError?: (error: AxiosError<any>) => void;
+  onError?: (error: any) => void;
   onSuccess?: () => void;
   setQuantityOfProducst?: (Qualitity: number) => void;
   labelQuantity?: boolean;
@@ -29,8 +32,26 @@ const CartItem = ({
   setQuantityOfProducst,
   labelQuantity = false,
 }: CartItem) => {
-  const { setQuantity, quantity } = useProductElasticContext();
-  const available = product.stock ? Boolean(+product.stock > 0) : false;
+  const { updateCart, getCart, items } = useCart();
+  const available = product.attributes.stock
+    ? Boolean(+product.attributes.stock > 0)
+    : false;
+  const isServiceProduct =
+    product.attributes.categories.length > 0 &&
+    product.attributes.categories?.some((item) => item.name === "Servicios");
+  const isVirtualProduct = product.attributes.categories?.some(
+    (item) => item.name === "Pines Virtuales"
+  );
+
+  if (isServiceProduct || isVirtualProduct) {
+    product.quantity = 1;
+  }
+
+  const slug =
+    product.attributes.type === "variation"
+      ? product.attributes.slugParent
+      : product.attributes.slug;
+
 
   return (
     <div
@@ -42,23 +63,23 @@ const CartItem = ({
     >
       <div className="flex space-x-2">
         <Badge
-          badgeContent={quantity}
+          badgeContent={product.quantity}
           color="info"
           visible={variant !== "cart"}
         >
-          <div className="flex aspect-square cursor-pointer items-center justify-center rounded-lg bg-white">
-            <Image
-            width={100}
-            height={100}
-              className="aspect-square rounded-lg"
-              src={product.images[0].src}
-              alt={product.images[0].name || "Product"} // TODO: Descirption product does not exist
-            />
+          <div className="flex aspect-square h-12 w-12 cursor-pointer items-center justify-center rounded-lg bg-white">
+            <a title="productImage" href={`/productos/${slug}`}>
+              <img
+                className="aspect-square rounded-lg"
+                src={product.attributes.images[0]}
+                alt={product.attributes.name || "Product"}
+              />
+            </a>
           </div>
         </Badge>
         <div className="px-0 lg:px-2">
           <div className="text-xs text-gray-400">
-            <span>{product.sellerInfo.name}</span>
+            <span>{product.attributes.sellerName}</span>
           </div>
           <div className={clsx(variant === "cart" && "flex")}>
             <span
@@ -68,12 +89,56 @@ const CartItem = ({
                 variant === "checkout" && "text-sm line-clamp-2"
               )}
             >
-              {product.name}
+              <a title="productName" href={`/productos/${slug}`}>
+                {product.attributes.name}
+              </a>
             </span>
+            <div
+              className={clsx(variant === "cart" && "relative top-1 left-2")}
+            >
+              {isServiceProduct &&
+                (variant === "checkout" || variant === "cart") && (
+                  <Chip color="info">Servicio</Chip>
+                )}
+              {isVirtualProduct &&
+                (variant === "checkout" || variant === "cart") && (
+                  <Chip color="info">Virtual</Chip>
+                )}
+            </div>
           </div>
 
           {(variant === "cart" || variant === "side") && (
-            <Button size="sm" variant="text" color="error">
+            <Button
+              size="sm"
+              variant="text"
+              color="error"
+              onClick={() => {
+                updateCart(
+                  {
+                    product: {
+                      productId: id,
+                      quantity: product.quantity,
+                    },
+                  },
+                  "delete"
+                ).then((response) => {
+                  if (response?.data.data.cartAttributes.products.length) {
+                    if (setQuantityOfProducst) {
+                      setQuantityOfProducst(
+                        response?.data.data.cartAttributes.products.length
+                      );
+                    }
+                  } else {
+                    if (setQuantityOfProducst) {
+                      setQuantityOfProducst(0);
+                    }
+                  }
+                });
+                toast("Se ha eliminado el producto del carrito.", {
+                  position: "top-center",
+                });
+              }}
+            >
               Eliminar
             </Button>
           )}
@@ -83,32 +148,59 @@ const CartItem = ({
       <div
         className={clsx(
           (variant === "cart" || variant === "side") &&
-            "grid grid-cols-3 place-items-center items-center gap-2",
-          variant === "checkout" && "flex min-w-max items-center justify-end"
+            "grid grid-cols-2 place-items-end items-center gap-2",
+          variant === "checkout" && "flex min-w-max items-center justify-end",
+          (isServiceProduct || isVirtualProduct) && "grid-cols-none"
         )}
       >
-        {(variant === "cart" || variant === "side") && available && (
-          <div className="col-span-2">
-
+        {(variant === "cart" || variant === "side") &&
+          !isServiceProduct &&
+          !isVirtualProduct &&
+          available && (
             <QuantityInput
-              defaultValue={quantity}
-              max={product.stock}
+              defaultValue={product.quantity}
+              max={product.attributes.stock}
               dense={variant === "side" || variant === "cart"}
               cart={variant === "side" || variant === "cart"}
               labelQuantity={labelQuantity}
               disableInput
-              onChange={async (quantity) => {
-                setQuantity(quantity);
-                return true;
+              onChange={async (quantity: number) => {
+                return updateCart({
+                  product: {
+                    productId: id,
+                    quantity:
+                      product.quantity > quantity
+                        ? (product.quantity - quantity) * -1
+                        : quantity - product.quantity,
+                  },
+                })
+                  .then((response) => {
+                    if (response?.data.data.cartAttributes.products.length) {
+                      if (setQuantityOfProducst) {
+                        setQuantityOfProducst(
+                          response?.data.data.cartAttributes.products.length
+                        );
+                      }
+                    } else {
+                      if (setQuantityOfProducst) {
+                        setQuantityOfProducst(0);
+                      }
+                    }
+                    onSuccess();
+                    return true;
+                  })
+                  .catch((error) => {
+                    onError(error);
+                    return false;
+                  });
               }}
             />
-          </div>
-        )}
+          )}
 
-        <div className="flex flex-col items-end col-span-1">
+        <div className="flex flex-col items-end">
           <NumericFormat
             className="ml-4 text-xl font-bold"
-            value={+product.price}
+            value={+product.productTotal}
             prefix="$"
             displayType="text"
             thousandSeparator

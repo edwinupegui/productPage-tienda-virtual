@@ -55,10 +55,10 @@ const ProductImage = ({ images = [], productName }: IProductImage) => {
             )}
           </Swiper>
         </div>
-        <div className="absolute bottom-2 z-10 w-full space-x-2 p-1 md:mx-4">
+        <div className="absolute bottom-2 z-10 w-full space-x-4 p-1 md:mx-4">
           <Swiper
             effect="fade"
-            spaceBetween={4}
+            spaceBetween={50}
             breakpoints={{
               375: {
                 slidesPerView: 8,
@@ -74,13 +74,13 @@ const ProductImage = ({ images = [], productName }: IProductImage) => {
             {images?.map(({ src }, key) => (
               <SwiperSlide key={key}>
                 <span
-                  className="cursor-pointer"
+                  className="cursor-pointer mx-10"
                   onMouseEnter={() => handleImage(key)}
                   onClick={() => handleImage(key)}
                 >
                   <div
                     className={clsx(
-                      "block h-10 w-10 rounded-lg border bg-white shadow transition ease-in-out hover:border-tamagotchi md:h-12 md:w-12 border-[#E2E2E2]",
+                      "h-12 w-12 rounded-lg border bg-white shadow transition ease-in-out hover:border-tamagotchi md:h-14 md:w-14 border-[#E2E2E2]",
                       imageSelected === key && "border-tamagotchi"
                     )}
                   >

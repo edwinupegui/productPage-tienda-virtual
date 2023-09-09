@@ -9,10 +9,10 @@ import Alert from "../atoms/Alert";
 import Link from "next/link";
 import EmptyCart from "./EmptyCart";
 import useSideCart from "@/hooks/useSideCart.hook";
-import { useState } from "react";
-import { useProductElasticContext } from "@/contexts/productElasticContext";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CartItem from "../molecules/CartItem";
+import useCart from "@/hooks/useCart.hook";
 
 interface CheckoutResume {
   variant?: "checkout" | "side";
@@ -22,28 +22,21 @@ interface CheckoutResume {
 const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
   const router = useRouter();
   const { close } = useSideCart();
-  const { product, quantity } = useProductElasticContext();
-
-  console.log(product);
-
+  const { data: cart, items, loading } = useCart();
   const [openResume, setOpenResume] = useState<boolean>(false);
-  const [totalValue, setTotalValue] = useState<number>(0);
   const [cartErrors, setCartErrors] = useState<Error[]>();
   const [cartUpdated, setCartUpdated] = useState(false);
 
-  const [openProductsNotCoveredModal, setOpenProductsNotCoveredModal] =
-    useState<boolean>(false);
-
   return (
     <div className="h-full">
-      {product && variant === "checkout" && (
+      {cart && variant === "checkout" && (
         <div className="w-full">
           {!openResume && (
             <div className="fixed inset-x-0 bottom-3 z-[5] px-2 lg:hidden">
               <div className="flex w-full justify-between rounded bg-secondary p-4 text-white shadow-card">
                 <div className="flex items-center justify-between space-x-4">
                   <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black">
-                    <b>{quantity}</b>
+                    <b>{cart.cartAttributes.totalItems}</b>
                   </div>
                   <Button
                     className="underline"
@@ -56,7 +49,7 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
                 </div>
                 <h6 className="font-bold">
                   <NumericFormat
-                    value={totalValue}
+                    value={cart.cartAttributes.total}
                     prefix="$"
                     displayType="text"
                     thousandSeparator
@@ -94,7 +87,9 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
               >
                 <div className="scrollbar relative h-full min-w-min overflow-y-auto bg-white p-2 pb-12 shadow-xl">
                   <div className="flex items-center justify-between">
-                    <h5 className="font-bold">Productos ({quantity})</h5>
+                    <h5 className="font-bold">
+                      Productos ({cart.cartAttributes.totalItems})
+                    </h5>
                     <IconButton
                       icon={faXmark}
                       size="lg"
@@ -104,7 +99,7 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
                     />
                   </div>
                   <div>
-                    {/* <div className="divide-y overflow-auto py-4">
+                    <div className="divide-y overflow-auto py-4">
                       {items.map((product, key) => (
                         <CartItem
                           id={product.id}
@@ -113,11 +108,11 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
                           variant="checkout"
                         />
                       ))}
-                    </div> */}
+                    </div>
                     <div className="my-1 w-full">
-                      {/* <div className="space-y-2 p-4 font-bold">
+                      <div className="space-y-2 p-4 font-bold">
                         {cart.cartAttributes.delivery > 0 &&
-                          variant === 'checkout' && (
+                          variant === "checkout" && (
                             <div className="flex justify-between">
                               <span>Envío</span>
                               <NumericFormat
@@ -151,11 +146,11 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
                             />
                           </div>
                         )}
-                      </div> */}
+                      </div>
                       <div className="flex justify-between rounded-lg border border-secondary py-2 px-4 text-2xl font-bold text-secondary">
                         <span>Total</span>
                         <NumericFormat
-                          value={product.price}
+                          value={+cart.cartAttributes.total}
                           prefix="$"
                           displayType="text"
                           thousandSeparator
@@ -178,7 +173,7 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
         )}
       >
         <Backdrop
-          open={!product && variant !== "checkout"}
+          open={!cart && variant !== "checkout"}
           content={
             <img className="w-20" src="/assets/loading.gif" alt="loading" />
           }
@@ -194,7 +189,7 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
                 {message}
               </Alert>
             ))} */}
-          {product ? (
+          {cart && items.length > 0 ? (
             <div
               className={clsx(
                 "divide-y",
@@ -204,16 +199,19 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
               )}
             >
               <div className="scrollbar mb-8 divide-y overflow-y-auto">
-                <CartItem
-                  id={product.id}
-                  product={product}
-                  variant={variant}
-                  onError={(err) => setCartErrors(err.response?.data.errors)}
-                  onSuccess={() => {
-                    setCartUpdated(true);
-                    setCartErrors(undefined);
-                  }}
-                />
+                {items.map((product, key) => (
+                  <CartItem
+                    id={product.id}
+                    product={product}
+                    key={key}
+                    variant={variant}
+                    onError={(err) => setCartErrors(err.response?.data.errors)}
+                    onSuccess={() => {
+                      setCartUpdated(true);
+                      setCartErrors(undefined);
+                    }}
+                  />
+                ))}
               </div>
 
               <div
@@ -223,9 +221,9 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
                 )}
               >
                 <div className="my-1 w-full">
-                  {/* <div className="space-y-2 p-4 font-bold">
+                  <div className="space-y-2 p-4 font-bold">
                     {cart.cartAttributes.delivery > 0 &&
-                      variant === 'checkout' && (
+                      variant === "checkout" && (
                         <div className="flex justify-between">
                           <span>Envío</span>
                           <NumericFormat
@@ -259,12 +257,11 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
                         />
                       </div>
                     )}
-                   
-                  </div> */}
+                  </div>
                   <div className="flex justify-between rounded-lg border border-secondary py-2 px-4 text-2xl font-bold text-secondary">
                     <span>Total</span>
                     <NumericFormat
-                      value={product.price}
+                      value={+cart.cartAttributes.total}
                       prefix="$"
                       displayType="text"
                       thousandSeparator
@@ -274,7 +271,7 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
                 </div>
                 {variant === "side" && (
                   <div className="flex flex-col justify-between space-y-2 px-4">
-                    {product ? (
+                    {items.length > 0 ? (
                       <>
                         <Link href="/checkout" passHref>
                           <Button
@@ -310,12 +307,17 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
             </div>
           ) : (
             <>
-              <EmptyCart
-                onClick={() => {
-                  close();
-                  router.back();
-                }}
-              />
+            {
+              !loading && (
+
+                <EmptyCart
+                  onClick={() => {
+                    close();
+                    router.back();
+                  }}
+                />
+              )
+            }
             </>
           )}
         </Backdrop>
