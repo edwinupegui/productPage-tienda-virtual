@@ -7,7 +7,6 @@ import Badge from "../atoms/Badge";
 import Chip from "../atoms/Chip";
 import Button from "../atoms/Button";
 import QuantityInput from "./QuantityInput";
-import { useEffect } from "react";
 
 interface CartItem {
   id: string;
@@ -15,7 +14,6 @@ interface CartItem {
   variant?: "cart" | "saved" | "checkout" | "side";
   onError?: (error: any) => void;
   onSuccess?: () => void;
-  setQuantityOfProducst?: (Qualitity: number) => void;
   labelQuantity?: boolean;
 }
 
@@ -29,10 +27,10 @@ const CartItem = ({
   onError = () => {
     return;
   },
-  setQuantityOfProducst,
   labelQuantity = false,
 }: CartItem) => {
-  const { updateCart, getCart, items } = useCart();
+  const { updateCart } = useCart();
+
   const available = product.attributes.stock
     ? Boolean(+product.attributes.stock > 0)
     : false;
@@ -51,7 +49,6 @@ const CartItem = ({
     product.attributes.type === "variation"
       ? product.attributes.slugParent
       : product.attributes.slug;
-
 
   return (
     <div
@@ -121,19 +118,7 @@ const CartItem = ({
                     },
                   },
                   "delete"
-                ).then((response) => {
-                  if (response?.data.data.cartAttributes.products.length) {
-                    if (setQuantityOfProducst) {
-                      setQuantityOfProducst(
-                        response?.data.data.cartAttributes.products.length
-                      );
-                    }
-                  } else {
-                    if (setQuantityOfProducst) {
-                      setQuantityOfProducst(0);
-                    }
-                  }
-                });
+                )
                 toast("Se ha eliminado el producto del carrito.", {
                   position: "top-center",
                 });
@@ -174,18 +159,7 @@ const CartItem = ({
                         : quantity - product.quantity,
                   },
                 })
-                  .then((response) => {
-                    if (response?.data.data.cartAttributes.products.length) {
-                      if (setQuantityOfProducst) {
-                        setQuantityOfProducst(
-                          response?.data.data.cartAttributes.products.length
-                        );
-                      }
-                    } else {
-                      if (setQuantityOfProducst) {
-                        setQuantityOfProducst(0);
-                      }
-                    }
+                  .then(() => {
                     onSuccess();
                     return true;
                   })

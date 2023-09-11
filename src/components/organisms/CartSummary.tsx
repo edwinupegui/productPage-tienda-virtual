@@ -9,11 +9,11 @@ import Alert from "../atoms/Alert";
 import Link from "next/link";
 import EmptyCart from "./EmptyCart";
 import useSideCart from "@/hooks/useSideCart.hook";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CartItem from "../molecules/CartItem";
 import useCart from "@/hooks/useCart.hook";
-
+import { Error } from "@/types/Cart/CartResponse";
 interface CheckoutResume {
   variant?: "checkout" | "side";
   focusInput?: () => void;
@@ -183,12 +183,12 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
               Carrito actualizado.
             </Alert>
           )}
-          {/* {cartErrors &&
+          {cartErrors &&
             cartErrors.map(({ code, message }) => (
               <Alert color="error" type="error" key={code}>
                 {message}
               </Alert>
-            ))} */}
+            ))}
           {cart && items.length > 0 ? (
             <div
               className={clsx(
@@ -307,17 +307,14 @@ const CartSummary = ({ variant = "checkout" }: CheckoutResume) => {
             </div>
           ) : (
             <>
-            {
-              !loading && (
-
+              {!loading && (
                 <EmptyCart
                   onClick={() => {
                     close();
                     router.back();
                   }}
                 />
-              )
-            }
+              )}
             </>
           )}
         </Backdrop>

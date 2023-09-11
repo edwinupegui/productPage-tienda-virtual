@@ -1,17 +1,15 @@
-import { ChangeEvent, useState } from 'react';
-import clsx from 'clsx';
+import { ChangeEvent, useState } from "react";
+import clsx from "clsx";
 
 import {
   faCircleMinus,
   faCirclePlus,
   faSpinnerThird,
-} from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import IconButton from '../atoms/IconButton';
-import Select from '../atoms/Select';
-import TextField from '../atoms/TextField';
-
-
+} from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import IconButton from "../atoms/IconButton";
+import Select from "../atoms/Select";
+import TextField from "../atoms/TextField";
 
 interface ProductQuantity {
   defaultValue?: number;
@@ -43,10 +41,14 @@ const QuantityInput = ({
     const newQuantity = quantity + 1;
     if (max) {
       if (newQuantity <= Number(max)) {
-        if (await onChange(newQuantity)) setQuantity(newQuantity);
+        if (await onChange(newQuantity)) {
+          setQuantity(newQuantity);
+        }
       }
     } else {
-      if (await onChange(newQuantity)) setQuantity(newQuantity);
+      if (await onChange(newQuantity)) {
+        setQuantity(newQuantity);
+      }
     }
   };
 
@@ -56,14 +58,18 @@ const QuantityInput = ({
     if (newQuantity <= 0) {
       setQuantity(defaultValue);
     } else {
-      if (await onChange(newQuantity)) setQuantity(newQuantity);
+      if (await onChange(newQuantity)) {
+        setQuantity(newQuantity);
+      }
     }
   };
 
   const handleSelectQuantity = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const newQuantity = +e.target.value;
-    if (await onChange(newQuantity)) setQuantity(newQuantity);
+    if (await onChange(newQuantity)) {
+      setQuantity(newQuantity);
+    }
   };
 
   const handleInputOnBlur = () => {
@@ -87,12 +93,12 @@ const QuantityInput = ({
           <span className="helper-text">({max}) disponibles</span>
         )}
       </div>
-      <div className={clsx(dense ? 'w-40' : 'w-full rounded md:w-44')}>
+      <div className={clsx(dense ? "w-40" : "w-full rounded md:w-44")}>
         <div className="z-20 flex items-center gap-2">
           <div className="flex items-center justify-between">
             <IconButton
               icon={faCircleMinus}
-              size={dense ? '2x' : 'lg'}
+              size={dense ? "2x" : "lg"}
               onClick={subtractQuantity}
               disabled={quantity <= 1 ? true : disabled || activeQuantity}
             />
@@ -127,7 +133,7 @@ const QuantityInput = ({
             )}
             <IconButton
               icon={faCirclePlus}
-              size={dense ? '2x' : 'lg'}
+              size={dense ? "2x" : "lg"}
               onClick={addQuantity}
               disabled={disabled || activeQuantity}
             />
