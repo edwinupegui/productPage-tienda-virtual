@@ -10,6 +10,9 @@ import { ICartResponse } from "@/types/Cart/CartResponse";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import router from "next/router";
+import Alert from "../atoms/Alert";
+import Modal from "../atoms/Modal";
+import ProductsUnavailabilityForm from "../molecules/ProductsUnavailabilityForm";
 
 const ProductInformation = (product: Source) => {
   const { open, addNew } = useSideCart();
@@ -17,8 +20,13 @@ const ProductInformation = (product: Source) => {
   const [cartErrors, setCartErrors] = useState<any>();
   const [quantity, setQuantity] = useState<number>(1);
   const [disableButtons, setDisableButtons] = useState(false);
+  const [modal, setModal] = useState<boolean>(false);
   const stock = product.stock;
   const available = product.stock ? Boolean(+product.stock > 0) : false;
+
+  const onClose = () => {
+    setModal(false);
+  };
 
   return (
     <div className="h-full space-y-4 rounded border-l p-4 flex flex-col gap-4">
@@ -46,17 +54,19 @@ const ProductInformation = (product: Source) => {
         {typeof stock !== "undefined" && (
           <div className="space-y-2">
             <Chip color={available ? "success" : "error"}>
-              {available ? "Stock disponible" : "Stock No Disponible"}
+              {available ? "Stock Disponible" : "Stock No Disponible"}
             </Chip>
-            {!available && (
-              <div className="border rounded-md ">
+            {available && (
+              <div className="border rounded-md p-7 border-[#E2E2E2] bg-[#FBFBFB] flex flex-col gap-4 font-medium">
                 <p>
                   ¿Deseas que te notifiquemos cuando este producto tenga stock
                   disponible?
                 </p>
-                <Button color="info" size="md">
-                  Si, avisame
-                </Button>
+                <div>
+                  <Button color="info" size="md" onClick={() => setModal(true)}>
+                    Si, avisame
+                  </Button>
+                </div>
               </div>
             )}
             {available && +stock === 1 && (
@@ -76,74 +86,87 @@ const ProductInformation = (product: Source) => {
           </div>
         )}
       </div>
-
-      <div className="flex flex-col gap-2 mt-10">
-        <Button
-          color="info"
-          size="lg"
-          disabled={!available || disableButtons}
-          fullwidth
-          onClick={async () => {
-            setDisableButtons(true);
-            updateCart({
-              product: {
-                productId: product.id,
-                quantity:
-                  product.type === "service" || product.type === "virtual"
-                    ? 1
-                    : quantity,
-              },
-            })
-              .then(() => {
-                addNew();
-                open();
+      {cartErrors &&
+        cartErrors.map(({ code, message }: any) => (
+          <Alert color="error" type="error" key={code}>
+            {message}
+          </Alert>
+        ))}
+      {available && (
+        <div className="flex flex-col gap-2 mt-10">
+          <Button
+            color="info"
+            size="lg"
+            disabled={!available || disableButtons}
+            fullwidth
+            onClick={async () => {
+              setDisableButtons(true);
+              updateCart({
+                product: {
+                  productId: product.id,
+                  quantity:
+                    product.type === "service" || product.type === "virtual"
+                      ? 1
+                      : quantity,
+                },
               })
-              .catch((error: AxiosError<ICartResponse>) => {
-                setCartErrors(error.response?.data.errors);
+                .then(() => {
+                  addNew();
+                  open();
+                })
+                .catch((error: AxiosError<ICartResponse>) => {
+                  setCartErrors(error.response?.data.errors);
+                })
+                .finally(() => {
+                  setDisableButtons(false);
+                });
+            }}
+          >
+            Añadir al carrito
+          </Button>
+          <Button
+            color="tamagotchi"
+            size="lg"
+            variant="outlined"
+            disabled={!available || disableButtons}
+            fullwidth
+            onClick={async () => {
+              setDisableButtons(true);
+              updateCart({
+                product: {
+                  productId: product.id,
+                  quantity:
+                    product.type === "service" || product.type === "virtual"
+                      ? 1
+                      : quantity,
+                },
               })
-              .finally(() => {
-                setDisableButtons(false);
-              });
-          }}
-        >
-          Añadir al carrito
-        </Button>
-        <Button
-          color="tamagotchi"
-          size="lg"
-          variant="outlined"
-          disabled={!available || disableButtons}
-          fullwidth
-          onClick={async () => {
-            setDisableButtons(true);
-            updateCart({
-              product: {
-                productId: product.id,
-                quantity:
-                  product.type === "service" || product.type === "virtual"
-                    ? 1
-                    : quantity,
-              },
-            })
-              .then(() => {
-                if (available) {
-                  toast.success(
-                    "¡Tu producto se agregó al carrito! Redireccionando al checkout...",
-                    {
-                      position: "top-center",
-                    }
-                  );
-                  // router.push('/checkout');
-                }
-              })
-              .catch((error: AxiosError<ICartResponse>) => {
-                setCartErrors(error.response?.data.errors);
-              });
-          }}
-        >
-          Comprar ahora
-        </Button>
-      </div>
+                .then(() => {
+                  if (available) {
+                    toast.success(
+                      "¡Tu producto se agregó al carrito! Redireccionando al checkout...",
+                      {
+                        position: "top-center",
+                      }
+                    );
+                    // router.push('/checkout');
+                  }
+                })
+                .catch((error: AxiosError<ICartResponse>) => {
+                  setCartErrors(error.response?.data.errors);
+                });
+            }}
+          >
+            Comprar ahora
+          </Button>
+        </div>
+      )}
+      <Modal open={modal} onClose={onClose} size="3xl">
+        <div className="p-10 flex flex-col gap-3 ml-10">
+          <h2 className="text-xl">Danos tus datos</h2>
+          <ProductsUnavailabilityForm />
+        </div>
+      </Modal>
     </div>
   );
 };

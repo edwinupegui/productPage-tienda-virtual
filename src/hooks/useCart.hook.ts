@@ -12,25 +12,12 @@ import {
 import { toast } from "react-toastify";
 import useSWR from "swr";
 
-const { generateToken, apiToken } = UseApiToken();
-
 const fetchCart = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CART_SERVICE,
   headers: {
     "api-key": `${process.env.NEXT_PUBLIC_CART_API_KEY}`,
-    "Api-Token": apiToken,
   },
 });
-
-const generateAndSetToken = () => {
-  const newApiToken = generateToken();
-  const headers = {
-    ...fetchCart.defaults.headers,
-    "Api-Token": newApiToken,
-    "api-key": `${process.env.NEXT_PUBLIC_CART_API_KEY}`,
-  };
-  fetchCart.defaults.headers = headers;
-};
 
 const errorsCodes: Record<string, string> = {
   "9": "Producto sin Stock",
@@ -112,14 +99,12 @@ export default function useCart(): IUseCart {
     if (cartId) {
       setcartUniqueId(cartId);
     }
-    generateAndSetToken();
   }, []);
 
   const getCart = async (cartId: string) => {
     let retries = 3;
     while (retries > 0) {
       try {
-        generateAndSetToken();
         const response = await fetchCart.get<ICartResponse>(
           `/${cartId === null ? cartUniqueId : cartId}`
         );
@@ -141,7 +126,6 @@ export default function useCart(): IUseCart {
     let retries = 3;
     while (retries > 0) {
       try {
-        generateAndSetToken();
         const cuid = localStorage.getItem("cuid");
         const cart = await fetchCart.post<ICartResponse>("/", {
           ...newProduct,

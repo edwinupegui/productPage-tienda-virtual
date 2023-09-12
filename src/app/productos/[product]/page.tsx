@@ -90,13 +90,13 @@ const Product = () => {
         <>
           <section className="lg:col-span-3">
             <ProductImage
-              images={product.hits.hits[0]._source.images}
-              productName={product.hits.hits[0]._source.name}
+              images={product.hits.hits[0]?._source.images}
+              productName={product.hits.hits[0]?._source.name}
             />
           </section>
           <section className="lg:col-span-2">
             <div className="h-2/3">
-              <ProductInformation {...product.hits.hits[0]._source} />
+              <ProductInformation {...product.hits.hits[0]?._source} />
             </div>
             <div></div>
           </section>
