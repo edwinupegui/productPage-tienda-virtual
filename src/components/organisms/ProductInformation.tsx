@@ -56,7 +56,7 @@ const ProductInformation = (product: Source) => {
             <Chip color={available ? "success" : "error"}>
               {available ? "Stock Disponible" : "Stock No Disponible"}
             </Chip>
-            {available && (
+            {!available && (
               <div className="border rounded-md p-7 border-[#E2E2E2] bg-[#FBFBFB] flex flex-col gap-4 font-medium">
                 <p>
                   ¿Deseas que te notifiquemos cuando este producto tenga stock
@@ -162,7 +162,7 @@ const ProductInformation = (product: Source) => {
         </div>
       )}
       <Modal open={modal} onClose={onClose} size="3xl">
-        <div className="p-10 flex flex-col gap-3 ml-10">
+        <div className="px-10 py-5 flex flex-col gap-3 ml-10">
           <h2 className="text-xl">Danos tus datos</h2>
           <ProductsUnavailabilityForm />
         </div>

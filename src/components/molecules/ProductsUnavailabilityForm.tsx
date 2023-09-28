@@ -88,7 +88,7 @@ const ProductsUnavailabilityForm = () => {
           ...EMAIL_VALIDATION,
         })}
       />
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-end mt-2">
         <Button
           // loading={loading}
           disabled={!isValid}
