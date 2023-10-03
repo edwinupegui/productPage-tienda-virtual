@@ -85,21 +85,27 @@ const Product = () => {
   }
 
   return (
-    <main className="grid card shadow-card grid-cols-1 lg:grid-cols-5 mx-auto">
+    <main className="grid card shadow-card grid-cols-1 sm:grid-cols-5 mx-auto">
       {product && (
         <>
-          <section className="lg:col-span-3">
+          <section className="sm:col-span-3">
             <ProductImage
               images={product.hits.hits[0]?._source.images}
               productName={product.hits.hits[0]?._source.name}
             />
           </section>
-          <section className="lg:col-span-2">
+          <section className="sm:col-span-2">
             <div className="h-2/3">
               <ProductInformation {...product.hits.hits[0]?._source} />
             </div>
             <div></div>
           </section>
+          <section className="mx-auto md:container my-[30px]">
+          <HomeProductsSlider
+            products={productStore}
+            title="Más productos para ti"
+          />
+        </section>
         </>
       )}
     </main>
